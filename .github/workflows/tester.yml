@@ -41,3 +41,18 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
+          
+  get-ci-env:
+    runs-on: ubuntu-latest
+    outputs:
+      ci_env: ${{ steps.determine-env.outputs.ci_env }}
+    steps:
+    - id: determine-env
+      run: |
+        if [[ ${{ github.ref_name }} == "main" ]]
+        then
+          # in future include ${{ github.ref }} == refs/tags/prd-* for prd deployment using tags (e.g. calver)
+          echo "ci_env=prd" >> $GITHUB_OUTPUT
+        else
+          echo "ci_env=dev" >> $GITHUB_OUTPUT
+        fi
