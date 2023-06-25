@@ -120,7 +120,7 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    if: ${{ needs.changes.outputs.prefect_flows_changed == 'true' }}
+    #if: ${{ needs.changes.outputs.prefect_flows_changed == 'true' }}
     outputs:
       flows-to-deploy: ${{ steps.get-flows-with-deployments.outputs.flows_to_deploy }}
     steps:
