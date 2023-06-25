@@ -121,6 +121,54 @@ jobs:
         echo "PREFECT_CI_USER_KEY variable : ${{ secrets.PREFECT_CI_USER_KEY }}"
         echo "PREFECT_CI_USER_SECRET variable : ${{ secrets.PREFECT_CI_USER_SECRET }}"
         echo "github ref varibale : ${{ github.ref_name }}"
+        
+        
+  maintenance:
+    needs: [get-ci-env, create-virtualenv, changes]
+    environment:
+      name: ${{ needs.get-ci-env.outputs.ci_env }}
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    if: ${{ needs.changes.outputs.prefect_flows_changed == 'true' }}
+    outputs:
+      flows-to-deploy: ${{ steps.get-flows-with-deployments.outputs.flows_to_deploy }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9
+    - name: Restore venv
+      uses: syphar/restore-virtualenv@v1
+      id: cache-virtualenv
+
+    - name: Prefect Cloud login
+      run: |
+        prefect config set PREFECT_API_KEY=${{ env.PREFECT_API_KEY }}
+        prefect config set PREFECT_API_URL=${{ env.PREFECT_API_URL }} 
+
+    - name: Configure AWS credentials by assuming role
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        #role-to-assume: ${{ vars.CI_ROLE_ARN_GITHUB }}
+        role-to-assume: ${{ env.CI_ROLE_ARN_GITHUB }}
+        aws-region: ${{ env.AWS_REGION }}
+        mask-aws-account-id: false
+
+    - name: set PYTHONPATH; S3_BLOCK_NAME; S3_STORAGE_BUCKET_PATH
+      env:
+        BUCKET_NAME: kp-dataservices-prefect2-${{ needs.get-ci-env.outputs.ci_env }}
+        S3_BLOCK_NAME: ${{ github.ref_name }}-flows-storage
+        # A more descriptive naming convention would be nice, e.g. flows-storage-branch=${{ github.ref_name }}
+      run: |
+        echo "PYTHONPATH=$GITHUB_WORKSPACE" >> $GITHUB_ENV
+        echo "S3_STORAGE_BUCKET_PATH=$BUCKET_NAME/$S3_BLOCK_NAME" >> $GITHUB_ENV
+        echo "S3_BLOCK_NAME=$S3_BLOCK_NAME" >> $GITHUB_ENV
+        echo $GITHUB_ENV
     
         
         
