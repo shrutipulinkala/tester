@@ -109,18 +109,7 @@ jobs:
           echo Code dependency changes: ${{ steps.filter.outputs.code_files }} >> $GITHUB_STEP_SUMMARY
           
           
-  display-variables:
-    needs: [get-ci-env, create-virtualenv, changes]
-    runs-on: ubuntu-latest
-    steps:
-    - name: Use variables
-      run: |
-        echo "PREFECT_API_KEY variable : ${{ secrets.PREFECT_API_KEY }}"
-        echo "PREFECT_API_URL variable : ${{ secrets.PREFECT_API_URL }}"
-        echo "CI_ROLE_ARN_GITHUB variable : ${{ vars.CI_ROLE_ARN_GITHUB }}"
-        echo "PREFECT_CI_USER_KEY variable : ${{ secrets.PREFECT_CI_USER_KEY }}"
-        echo "PREFECT_CI_USER_SECRET variable : ${{ secrets.PREFECT_CI_USER_SECRET }}"
-        echo "github ref varibale : ${{ github.ref_name }}"
+
         
         
   maintenance:
