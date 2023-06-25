@@ -16,6 +16,10 @@ on:
 
 env:
   AWS_REGION: 'ap-southeast-2'
+  PREFECT_API_KEY: 'pnu_RZCZPh0lnEmxbFn10lQbo4ke2Apm6g1ZXf8S'
+  PREFECT_API_URL: 'https://api.prefect.cloud/api'
+  CI_ROLE_ARN_GITHUB: 'arn:aws:iam::701377985539:role/GithubCiRole'
+  
 
 
 
@@ -52,7 +56,7 @@ jobs:
         if [[ ${{ github.ref_name }} == "main" ]]
         then
           # in future include ${{ github.ref }} == refs/tags/prd-* for prd deployment using tags (e.g. calver)
-          echo "ci_env=prd" >> $GITHUB_OUTPUT
+          echo "ci_env=dev" >> $GITHUB_OUTPUT
         else
           echo "ci_env=dev" >> $GITHUB_OUTPUT
         fi
@@ -116,3 +120,13 @@ jobs:
         echo "CI_ROLE_ARN_GITHUB variable : ${{ vars.CI_ROLE_ARN_GITHUB }}"
         echo "PREFECT_CI_USER_KEY variable : ${{ secrets.PREFECT_CI_USER_KEY }}"
         echo "PREFECT_CI_USER_SECRET variable : ${{ secrets.PREFECT_CI_USER_SECRET }}"
+        echo "github ref varibale : ${{ github.ref_name }}"
+        echo "github workspace : ${{GITHUB_WORKSPACE }}"
+        echo "PYTHONPATH=$GITHUB_WORKSPACE" >> $GITHUB_ENV
+        echo "S3_STORAGE_BUCKET_PATH=$BUCKET_NAME/$S3_BLOCK_NAME" >> $GITHUB_ENV
+        echo "S3_BLOCK_NAME=$S3_BLOCK_NAME" >> $GITHUB_ENV
+        echo $GITHUB_ENV
+    
+        
+        
+ 
