@@ -106,6 +106,7 @@ jobs:
           
           
   display-variables:
+    needs: [get-ci-env, create-virtualenv, changes]
     runs-on: ubuntu-latest
     steps:
     - name: Use variables
