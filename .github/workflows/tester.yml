@@ -121,11 +121,6 @@ jobs:
         echo "PREFECT_CI_USER_KEY variable : ${{ secrets.PREFECT_CI_USER_KEY }}"
         echo "PREFECT_CI_USER_SECRET variable : ${{ secrets.PREFECT_CI_USER_SECRET }}"
         echo "github ref varibale : ${{ github.ref_name }}"
-        echo "github workspace : ${{GITHUB_WORKSPACE }}"
-        echo "PYTHONPATH=$GITHUB_WORKSPACE" >> $GITHUB_ENV
-        echo "S3_STORAGE_BUCKET_PATH=$BUCKET_NAME/$S3_BLOCK_NAME" >> $GITHUB_ENV
-        echo "S3_BLOCK_NAME=$S3_BLOCK_NAME" >> $GITHUB_ENV
-        echo $GITHUB_ENV
     
         
         
