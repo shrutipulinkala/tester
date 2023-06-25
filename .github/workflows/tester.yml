@@ -103,3 +103,15 @@ jobs:
         run: | 
           echo Flows: ${{ steps.filter.outputs.flows_files }} >> $GITHUB_STEP_SUMMARY
           echo Code dependency changes: ${{ steps.filter.outputs.code_files }} >> $GITHUB_STEP_SUMMARY
+          
+          
+  display-variables:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Use variables
+      run: |
+        echo "PREFECT_API_KEY variable : ${{ secrets.PREFECT_API_KEY }}"
+        echo "PREFECT_API_URL variable : ${{ secrets.PREFECT_API_URL }}"
+        echo "CI_ROLE_ARN_GITHUB variable : ${{ vars.CI_ROLE_ARN_GITHUB }}"
+        echo "PREFECT_CI_USER_KEY variable : ${{ secrets.PREFECT_CI_USER_KEY }}"
+        echo "PREFECT_CI_USER_SECRET variable : ${{ secrets.PREFECT_CI_USER_SECRET }}"
